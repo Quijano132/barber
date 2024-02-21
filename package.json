@@ -1,0 +1,25 @@
+{
+  "name": "barberia",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.4",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.9.1",
+    "promise-mysql": "^5.2.0",
+    "sequelize": "^6.37.1",
+    "types": "^0.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
