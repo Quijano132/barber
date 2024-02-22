@@ -1,24 +1,27 @@
 import{getConnection} from "../database/database.js";
 
-export const getClients = async (req, res)=>{
-    try{
+export const getClients = async (req, res) => {
+    try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT * FROM barbero")
+        const result = await connection.query("SELECT DISTINCT * FROM barbero");
         res.json(result);
-    }catch(error){
+    } catch (error) {
         res.status(500);
-        res.send(error.message)
-
+        res.send(error.message);
     }
-    
 };
+
 
 
 export const getClient = async (req, res) => {
     try {
         const { id } = req.params;
         const connection = await getConnection();
-        const [result] = await connection.query('SELECT id, customer name FROM barbero WHERE id = ?', [id]);
+        const sanitizedId = c(id);
+
+       const [result] = await connection.query(`SELECT * FROM barbero WHERE idBarbero = ${sanitizedId}`);
+        
+
         if (result.length > 0) {
 
             res.json(result[0]);
@@ -34,24 +37,46 @@ export const getClient = async (req, res) => {
 };
 
 
-export const addClient = async(req, res)=>{
-    try{
-        const{nombreBarbero, apellidoBarbero, foto,nombrebarberia,horario,descripcion,numeroCelular}=req.body;
-        
-        if(nombreBarbero== undefined || apellidoBarbero == undefined || foto == undefined || nombrebarberia == undefined|| horario == undefined|| descripcion == undefined|| numeroCelular == undefined){
-            res.status(400).json({message:"Bad Request. Please fill all field"});
+export const addClient = async (req, res) => {
+    try {
+        const { nombreBarbero, apellidoBarbero, foto, nombrebarberia, horario, descripcion, numeroCelular } = req.body;
+
+        if (nombreBarbero === undefined || apellidoBarbero === undefined || foto === undefined || nombrebarberia === undefined || horario === undefined || descripcion === undefined || numeroCelular === undefined) {
+            res.status(400).json({ message: "Bad Request. Please fill all field" });
+            return;
         }
-        const barbero= { nombreBarbero, apellidoBarbero, foto,nombrebarberia,horario,descripcion,numeroCelular }
+
         const connection = await getConnection();
-        await connection.query("INSERT INTO barbero SET?", barbero)
+        const escapedValues = [
+            connection.escape(nombreBarbero),
+            connection.escape(apellidoBarbero),
+            connection.escape(foto),
+            connection.escape(nombrebarberia),
+            connection.escape(horario),
+            connection.escape(descripcion),
+            connection.escape(numeroCelular)
+        ];
 
-        res.json({message: "barbero added"});
-    }catch(error){
-        res.status(500);
-        res.send(error.message)
+        const query = `INSERT INTO barbero (nombreBarbero, apellidoBarbero, foto, nombrebarberia, horario, descripcion, numeroCelular) VALUES (${escapedValues.join(', ')})`;
 
+        await connection.query(query);
+
+        res.status(201).json({
+            nombreBarbero,
+            apellidoBarbero,
+            foto,
+            nombrebarberia,
+            horario,
+            descripcion,
+            numeroCelular,
+            message: "barbero added"
+        });
+    } catch (error) {
+        res.status(500).send(error.message);
     }
 };
+
+
 
 export const updateClient = async (req, res)=>{
     try{
