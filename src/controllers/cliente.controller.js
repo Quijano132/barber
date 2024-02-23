@@ -17,9 +17,9 @@ export const getClient = async (req, res) => {
     try {
         const { id } = req.params;
         const connection = await getConnection();
-        const sanitizedId = c(id);
+        const sanitizedId = connection.escape(id);
 
-       const [result] = await connection.query(`SELECT * FROM barbero WHERE idBarbero = ${sanitizedId}`);
+       const [result] = await connection.query(`SELECT * FROM barbero WHERE idBarbero = ${sanitizedId}`,[id]);
         
 
         if (result.length > 0) {
