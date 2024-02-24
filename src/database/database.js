@@ -6,14 +6,13 @@ export const sequelize = new Sequelize('barberia', 'root', 'Quijano123.', {
   dialect: 'mysql'
 });
 
-const main = async () => {
+export const getConnection = async () => {
   try {
-      await sequelize.authenticate();
-      console.log('Connection to the database has been established successfully.');
-      // Resto del código
+    await sequelize.authenticate();
+    console.log('Conexión a la base de datos exitosa');
+    return sequelize;
   } catch (error) {
-      console.error('Unable to connect to the database:', error.message);
+    console.error('Error de conexión a la base de datos:', error);
+    throw error;
   }
 };
-
-main();
