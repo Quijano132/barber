@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "prestart": "chmod +x node_modules/.bin/ts-node",
     "start": "nodemon src/index.js",
     "build": "npm run build"
   },
