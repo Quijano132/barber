@@ -3,7 +3,8 @@ import { Sequelize } from 'sequelize';
 
 export const sequelize = new Sequelize('barberia', 'root', 'Quijano123.', {
   host: 'localhost',
-  dialect: 'mysql'
+  dialect: 'mysql',
+  connectTimeout: 30000,
 });
 
 export const getConnection = async () => {
