@@ -69,7 +69,7 @@ export const addClient = async (req, res) => {
             horario,
             descripcion,
             numeroCelular,
-            message: "barbero added"
+            message: "barbero añadido"
         });
     } catch (error) {
         res.status(500).send(error.message);
@@ -78,25 +78,30 @@ export const addClient = async (req, res) => {
 
 
 
-export const updateClient = async (req, res)=>{
-    try{
-        const {id} = req.params;
-        const{ClientName, ClientLastName, NumberPhone,Age}=req.body;
+export const updateClient = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { nombreBarbero, apellidoBarbero, foto, nombrebarberia, horario, descripcion, numeroCelular } = req.body;
 
-        if(id == undefined ||ClientName== undefined || ClientLastName == undefined || NumberPhone == undefined || Age == undefined){
-            res.status(400).json({message:"Bad Request. Please fill all field"});
+        if (!nombreBarbero || !apellidoBarbero || !foto || !nombrebarberia || !horario || !descripcion || !numeroCelular) {
+            return res.status(400).json({ message: "Bad Request. Please fill all fields" });
         }
-        const cliente= {id, ClientName, ClientLastName, NumberPhone,Age }
-        const connection = await getConnection();
-        const result = await connection.query("UPDATE Cliente SET ? WHERE id = ?", [cliente,id]);
-        res.json(result);
-    }catch(error){
-        res.status(500);
-        res.send(error.message)
 
+        const barbero = { nombreBarbero, apellidoBarbero, foto, nombrebarberia, horario, descripcion, numeroCelular };
+        const connection = await getConnection();
+        const result = await connection.query("UPDATE barbero SET ? WHERE id = ?", [barbero, id]);
+
+        if (result[0].affectedRows > 0) {
+            return res.json({ message: "Update successful" });
+        } else {
+            return res.status(404).json({ message: "Barbero not found" });
+        }
+    } catch (error) {
+        console.error("Error in updateClient:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
     }
-    
 };
+
 
 export const deleteClient = async (req, res)=>{
     try{
