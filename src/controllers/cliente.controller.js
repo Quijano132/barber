@@ -77,45 +77,78 @@ export const addClient = async (req, res) => {
 };
 
 
-
 export const updateClient = async (req, res) => {
     try {
         const { id } = req.params;
         const { nombreBarbero, apellidoBarbero, foto, nombrebarberia, horario, descripcion, numeroCelular } = req.body;
 
-        if (!nombreBarbero || !apellidoBarbero || !foto || !nombrebarberia || !horario || !descripcion || !numeroCelular) {
-            return res.status(400).json({ message: "Bad Request. Please fill all fields" });
+        if (id == undefined || nombreBarbero == undefined || apellidoBarbero == undefined || foto == undefined || nombrebarberia == undefined || horario == undefined || descripcion == undefined || numeroCelular == undefined) {
+            res.status(400).json({ message: "Bad Request. Please fill all field" });
+            return;
         }
 
-        const barbero = { nombreBarbero, apellidoBarbero, foto, nombrebarberia, horario, descripcion, numeroCelular };
-        const connection = await getConnection();
-        const result = await connection.query("UPDATE barbero SET ? WHERE id = ?", [barbero, id]);
+        const connection = await getConnection(); // Inicializar la conexión aquí
 
-        if (result[0].affectedRows > 0) {
-            return res.json({ message: "Update successful" });
-        } else {
-            return res.status(404).json({ message: "Barbero not found" });
-        }
-    } catch (error) {
-        console.error("Error in updateClient:", error);
-        return res.status(500).json({ error: "Internal Server Error" });
-    }
-};
+        // Utilizar escape para cada valor individual
+        const escapedNombreBarbero = connection.escape(nombreBarbero);
+        const escapedApellidoBarbero = connection.escape(apellidoBarbero);
+        const escapedFoto = connection.escape(foto);
+        const escapedNombreBarberia = connection.escape(nombrebarberia);
+        const escapedHorario = connection.escape(horario);
+        const escapedDescripcion = connection.escape(descripcion);
+        const escapedNumeroCelular = connection.escape(numeroCelular);
 
+        const query = `UPDATE barbero SET 
+                        nombreBarbero = ${escapedNombreBarbero}, 
+                        apellidoBarbero = ${escapedApellidoBarbero}, 
+                        foto = ${escapedFoto}, 
+                        nombrebarberia = ${escapedNombreBarberia}, 
+                        horario = ${escapedHorario}, 
+                        descripcion = ${escapedDescripcion}, 
+                        numeroCelular = ${escapedNumeroCelular} 
+                        WHERE idBarbero = ${id}`;
 
-export const deleteClient = async (req, res)=>{
-    try{
-        const {id} = req.params;
-        const connection = await getConnection();
-        const result = await connection.query("DELETE FROM Cliente WHERE id = ?", id);
+        const result = await connection.query(query);
+
         res.json(result);
-    }catch(error){
-        res.status(500);
-        res.send(error.message)
-
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
     }
     
 };
+
+
+
+export const deleteClient = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Validar que id sea un número antes de utilizarlo
+        const idNumber = parseInt(id, 10);
+        if (isNaN(idNumber)) {
+            res.status(400).json({ message: "ID no válido" });
+            return;
+        }
+
+        const connection = await getConnection();
+
+        // Utilizar escape para el valor de id
+        const escapedId = connection.escape(idNumber);
+
+        const query = `DELETE FROM barbero WHERE idBarbero = ${escapedId}`;
+        const result = await connection.query(query);
+
+        if (result.affectedRows > 0) {
+            res.json({ message: "Barbero eliminado exitosamente" });
+        } else {
+            res.status(404).json({ message: "Barbero no encontrado o ya eliminado" });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 
 export const methods={
     getClient,
