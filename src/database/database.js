@@ -1,8 +1,8 @@
 // En database.js
 import { Sequelize } from 'sequelize';
 
-export const sequelize = new Sequelize('u491885106_barberia', 'u491885106_root', 'Quijano123.', {
-  host: 'https://auth-db805.hstgr.io/index.php?route=/database/structure&server=1&db=u491885106_barberia',
+export const sequelize = new Sequelize('bs8azajrxpe1vqvwikfd', 'u491885106_root', '9BUse6PUbqzlJU9Abc6q.', {
+  host: 'bs8azajrxpe1vqvwikfd-mysql.services.clever-cloud.com',
   dialect: 'mysql',
   connectTimeout: 60000,
 });
