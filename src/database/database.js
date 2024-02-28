@@ -1,7 +1,7 @@
 // En database.js
 import { Sequelize } from 'sequelize';
 
-export const sequelize = new Sequelize('bs8azajrxpe1vqvwikfd', 'u491885106_root', '9BUse6PUbqzlJU9Abc6q', {
+export const sequelize = new Sequelize('bs8azajrxpe1vqvwikfd', 'u6dffcjkxqzownqn', '9BUse6PUbqzlJU9Abc6q', {
   host: 'bs8azajrxpe1vqvwikfd-mysql.services.clever-cloud.com',
   dialect: 'mysql',
   connectTimeout: 60000,
