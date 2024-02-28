@@ -1,5 +1,5 @@
 import { request, response, Router } from "express";
-import {methods as clienteController } from "../controllers/cliente.controller.js";
+import {methods as clienteController } from "../controllers/barbero.controller.js";
 
 
 const router=Router();

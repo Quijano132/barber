@@ -3,7 +3,11 @@ import morgan from 'morgan';
 const app =express();
 
 //routes import
-import clienteRoute from "./routes/cliente.routes.js";
+import barberoRoute from "./routes/barbero.routes.js";
+import citasRoute from "./routes/citas.routes.js"
+import usuarioRoutes from "./routes/usuarios.routes.js"
+import categoriaRoutes from "./routes/categoria.routes.js"
+import serviciosRoutes from "./routes/servicios.routes.js"
 
 //settings
 app.set("port", 4000);
@@ -22,7 +26,11 @@ app.use((err, req, res, next) => {
 
 
 //routes 
-app.use("/api/Usuarios",clienteRoute)
+app.use("/api/Barbero",barberoRoute)
+app.use("/api/Citas",citasRoute)
+app.use("/api/Usuarios",usuarioRoutes)
+app.use("/api/Categorias",categoriaRoutes)
+app.use("/api/Servicios", serviciosRoutes)
 
 
 
